@@ -60,6 +60,9 @@ WSGI_APPLICATION = 'titor.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+
+import dj_database_url
+
 if 'titor' in hostname:
     DATABASES = {
         'default': dj_database_url.config()
