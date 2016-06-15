@@ -65,7 +65,7 @@ import dj_database_url
 
 if 'titor' in hostname:
     DATABASES = {
-        'default': dj_database_url.config()
+        'default': dj_database_url.config(conn_max_age=500)
     }
 else:
     DATABASES = {
