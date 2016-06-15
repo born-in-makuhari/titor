@@ -20,6 +20,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'g92b#ji+23$mt%k_=)v)c6duusty#$#$a1kz-^p*zc4c=rt-g#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+hostname = os.environ.get('HOSTNAME')
+
 if 'titor' in hostname:
     DEBUG = False
     TEMPLATE_DEBUG = False
