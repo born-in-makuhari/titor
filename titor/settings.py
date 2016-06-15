@@ -33,8 +33,10 @@ STATICFILES_DIRS = (
 SECRET_KEY = 'g92b#ji+23$mt%k_=)v)c6duusty#$#$a1kz-^p*zc4c=rt-g#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
-hostname = os.environ.get('HOSTNAME')
+if os.environ.get('HOSTNAME'):
+    hostname = os.environ.get('HOSTNAME')
+else:
+    hostname = 'localhost'
 
 if 'titor' in hostname:
     DEBUG = False
