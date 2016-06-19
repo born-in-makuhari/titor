@@ -54,7 +54,6 @@ ROOT_URLCONF = 'titor.urls'
 
 WSGI_APPLICATION = 'titor.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
@@ -85,5 +84,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
-    '/home/yoshinari/wk/python-django/Workspace/titor/titorApp/templates',
+    os.path.join(BASE_DIR, '..', 'titorApp'),
 )
