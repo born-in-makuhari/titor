@@ -38,6 +38,8 @@ if os.environ.get('HOSTNAME'):
 else:
     hostname = 'localhost'
 
+ALLOWED_HOSTS = []
+
 if 'titor' in hostname:
     DEBUG = False
     TEMPLATE_DEBUG = False
@@ -47,9 +49,6 @@ else:
     DEBUG = True
     TEMPLATE_DEBUG = True
     PRODUCTION = False
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
