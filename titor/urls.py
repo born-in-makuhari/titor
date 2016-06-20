@@ -7,7 +7,7 @@ urlpatterns = patterns('',
     url(r'^titor/', include('titorApp.urls')),
 )
 
-if not settings.DEBUG:
+if settings.PRODUCTION:
     urlpatterns += patterns(
         '',
         (
