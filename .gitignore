@@ -9,3 +9,4 @@ titorApp/admin.pyc
 titorApp/models.pyc
 titorApp/urls.pyc
 titorApp/views.pyc
+titorApp/migrations/__init__.pyc
