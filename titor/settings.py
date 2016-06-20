@@ -39,8 +39,8 @@ else:
     hostname = 'localhost'
 
 if 'titor' in hostname:
-    DEBUG = True
-    TEMPLATE_DEBUG = True
+    DEBUG = False
+    TEMPLATE_DEBUG = False
     ALLOWED_HOSTS = ['*']
 else:
     DEBUG = True
