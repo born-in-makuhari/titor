@@ -59,6 +59,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gunicorn',
+    'titorApp',
+    'chartjs',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -74,7 +76,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'titor.urls'
 
 WSGI_APPLICATION = 'titor.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
@@ -111,3 +112,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, '..', 'titorApp'),
+)
