@@ -1,6 +1,9 @@
+chartjs==1.2
 dj-database-url==0.4.1
 Django==1.9.7
+django-chartjs==1.0
 gunicorn==19.6.0
 MySQL-python==1.2.5
 psycopg2==2.6.1
+six==1.10.0
 whitenoise==3.2
