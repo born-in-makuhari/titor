@@ -20,9 +20,9 @@ import re
 
 #GLOBAL
 CORP_CD = 998407
-START_DATE = datetime.date(2016, 5, 27)
+START_DATE = datetime.date(2015, 5, 27)
 END_DATE = datetime.date(2016, 6, 17)
-
+print "GLOBAL"
 class ColorsView(TemplateView):
     template_name = 'colors.html'
 
@@ -41,6 +41,7 @@ class ChartMixin(object):
         """Return 7 labels."""
         #return ["January", "February", "March", "April", "May", "June", "July"]
         get_jsm = JsmGetPrice(CORP_CD,START_DATE,END_DATE)
+        #get_jsm = GET_JSM
         date = get_jsm.get_date()
         return date
         #return ["1","2","3","4","5","6","7","8"]
