@@ -126,6 +126,7 @@ class JsmGetPrice():
         print len(self.pricedata)
         for pricedata_eachday in self.pricedata:
             day_list.append(str(pricedata_eachday.date).replace(' 00:00:00',''))
+            #day_list.append((pricedata_eachday.date).replace(' 00:00:00',''))
         
         print day_list
         return day_list
@@ -140,13 +141,10 @@ class AboutView(TemplateView):
         #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
         context = super(AboutView, self).get_context_data(**kwargs)
         context['30_day_registrations'] = self.thirty_day_registrations()
-        print context
         return context
 
     def thirty_day_registrations(self):
         final_data = {}
-        price = []
-        date = []
         dummy_dinal_dict = {}
 
         date = arrow.now()
@@ -161,10 +159,24 @@ class AboutView(TemplateView):
             final_data.append(count)
         print final_data
         '''
+
+        #generate instance
+        get_jsm = JsmGetPrice(CORP_CD,START_DATE,END_DATE)  
+          
+        #get_date
+        date = get_jsm.get_date()
+
+        #get_price
+        close_price = get_jsm.get_price()
+
+
         dummy_final_data = [1,2,3,4,5,6,7]
-        dummy_final_dict = {"price":[1,2,3,4,5,6,7],"date":[1,10,20,30,40,50,60]}
+        #dummy_final_dict = {"price":[1,2,3,4,5,6,7],"date":[1,10,20,30,40,50,60]}
+        dummy_final_dict = {"price":close_price,"date":date}
+        
         #return final_data
         print dummy_final_dict["price"]
+        print dummy_final_dict["date"]
         #return dummy_final_data
         return dummy_final_dict
 
