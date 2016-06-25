@@ -20,7 +20,7 @@
             //});
             $( document ).ready(function() {
             var data = {
-                labels: ['1', '5', '10', '15', '20', '25', '30'],
+                labels:{{30_day_registrations.date}},
                 datasets: [
                     {
                     label: "Site Registrations in the Last 30 Days",
@@ -31,7 +31,8 @@
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(220,220,220,1)",
                     //data: {{ 30_day_registrations }}
-                    data: [1,1,1,6,1,9]
+                    data: {{ 30_day_registrations.price}}
+                    //data: [1,1,1,6,1,9]
                     }
                 ]
             };

@@ -140,13 +140,19 @@ class AboutView(TemplateView):
         #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
         context = super(AboutView, self).get_context_data(**kwargs)
         context['30_day_registrations'] = self.thirty_day_registrations()
-        print "get_context"
+        print context
         return context
 
     def thirty_day_registrations(self):
-        final_data = []
+        final_data = {}
+        price = []
+        date = []
+        dummy_dinal_dict = {}
 
         date = arrow.now()
+
+
+        '''
         for day in xrange(1, 30):
             date = date.replace(days=-1)
             count = User.objects.filter(
@@ -154,7 +160,13 @@ class AboutView(TemplateView):
                 date_joined__lte=date.ceil('day').datetime).count()
             final_data.append(count)
         print final_data
-        return final_data
+        '''
+        dummy_final_data = [1,2,3,4,5,6,7]
+        dummy_final_dict = {"price":[1,2,3,4,5,6,7],"date":[1,10,20,30,40,50,60]}
+        #return final_data
+        print dummy_final_dict["price"]
+        #return dummy_final_data
+        return dummy_final_dict
 
 
 
