@@ -13,14 +13,16 @@ from chartjs.views.columns import BaseColumnsHighChartsView
 from chartjs.views.lines import BaseLineChartView, HighchartPlotLineChartView
 from chartjs.views.pie import HighChartPieView, HighChartDonutView
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 import jsm
 import datetime
 import re
+import arrow
 # Create your views here.
 
 #GLOBAL
 CORP_CD = 998407
-START_DATE = datetime.date(2015, 5, 27)
+START_DATE = datetime.date(2016, 5, 27)
 END_DATE = datetime.date(2016, 6, 17)
 print "GLOBAL"
 class ColorsView(TemplateView):
@@ -94,8 +96,8 @@ class DonutHighChartJSONView(ChartMixin, HighChartDonutView):
     pass
 
 
-class AboutView(TemplateView):
-    template_name = "titor/graph.html"
+#class AboutView(TemplateView):
+#    template_name = "titor/graph.html"
 
 class JsmGetPrice():
     def __init__(self,corp_cd,start_date,end_date):
@@ -127,6 +129,33 @@ class JsmGetPrice():
         
         print day_list
         return day_list
+
+
+#class AnalyticsIndexView(TemplateView):
+class AboutView(TemplateView):
+    template_name = "titor/graph.html"
+    #template_name = 'analytics/admin/index.html'
+
+    def get_context_data(self, **kwargs):
+        #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
+        context = super(AboutView, self).get_context_data(**kwargs)
+        context['30_day_registrations'] = self.thirty_day_registrations()
+        print "get_context"
+        return context
+
+    def thirty_day_registrations(self):
+        final_data = []
+
+        date = arrow.now()
+        for day in xrange(1, 30):
+            date = date.replace(days=-1)
+            count = User.objects.filter(
+                date_joined__gte=date.floor('day').datetime,
+                date_joined__lte=date.ceil('day').datetime).count()
+            final_data.append(count)
+        print final_data
+        return final_data
+
 
 
 
