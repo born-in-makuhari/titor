@@ -14,17 +14,23 @@ from chartjs.views.lines import BaseLineChartView, HighchartPlotLineChartView
 from chartjs.views.pie import HighChartPieView, HighChartDonutView
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from datetime import timedelta
 import jsm
 import datetime
 import re
 import arrow
 # Create your views here.
 
-#GLOBAL
+
+##############################
+#
+# nikkei average = 998407
+#
+##############################
 CORP_CD = 998407
-START_DATE = datetime.date(2016, 5, 27)
-END_DATE = datetime.date(2016, 6, 17)
-print "GLOBAL"
+
+"""
+
 class ColorsView(TemplateView):
     template_name = 'colors.html'
 
@@ -40,7 +46,6 @@ class ChartMixin(object):
         return 0 
 
     def get_labels(self):
-        """Return 7 labels."""
         #return ["January", "February", "March", "April", "May", "June", "July"]
         get_jsm = JsmGetPrice(CORP_CD,START_DATE,END_DATE)
         #get_jsm = GET_JSM
@@ -49,9 +54,7 @@ class ChartMixin(object):
         #return ["1","2","3","4","5","6","7","8"]
 
     def get_data(self):
-        """Return 3 random dataset to plot."""
         def data():
-            """Return 7 randint between 0 and 100."""
             return [randint(0, 100) for x in range(7)]
 
         #return [data() for x in range(3)]
@@ -60,11 +63,11 @@ class ChartMixin(object):
         return [close_price]
 
     def get_colors(self):
-        """Return a new shuffle list of color so we change the color
-        each time."""
         colors = COLORS[:]
         shuffle(colors)
         return next_color(colors)
+
+
 
 class ColumnHighChartJSONView(ChartMixin, BaseColumnsHighChartsView):
     title = _('Column Highchart test')
@@ -94,48 +97,41 @@ class PieHighChartJSONView(ChartMixin, HighChartPieView):
 
 class DonutHighChartJSONView(ChartMixin, HighChartDonutView):
     pass
-
-
-#class AboutView(TemplateView):
-#    template_name = "titor/graph.html"
+"""
 
 class JsmGetPrice():
     def __init__(self,corp_cd,start_date,end_date):
+        q = jsm.Quotes()
         self.corp_cd = corp_cd    
         self.start_date = start_date    
         self.end_date = end_date    
-        q = jsm.Quotes()
         self.close_dict = {}
         self.pricedata = q.get_historical_prices(corp_cd, jsm.DAILY, start_date, end_date)
+        self.close_list = []
+        self.date_list = []
+
+
+
         for pricedata_eachday in self.pricedata:
         #print str(pricedata_eachday.date).replace(' 00:00:00','')
             self.close_dict[str(pricedata_eachday.date).replace(' 00:00:00','')] = pricedata_eachday.close
 
-    def get_price(self):
-        close_list = []
+        
         for k,v in sorted(self.close_dict.items()):
-            close_list.append(v)
+            self.close_list.append(v)
+            self.date_list.append(k)
+           
 
-        return close_list
+    def get_price(self):
+        return self.close_list
 
     def get_date(self):
-        #pricedata = q.get
-        #print self.pricedata
-        i = 0
-        day_list = []
-        print len(self.pricedata)
-        for pricedata_eachday in self.pricedata:
-            day_list.append(str(pricedata_eachday.date).replace(' 00:00:00',''))
-            #day_list.append((pricedata_eachday.date).replace(' 00:00:00',''))
-        
-        print day_list
-        return day_list
+        return self.date_list
 
 
 #class AnalyticsIndexView(TemplateView):
 class AboutView(TemplateView):
     template_name = "titor/graph.html"
-    #template_name = 'analytics/admin/index.html'
 
     def get_context_data(self, **kwargs):
         #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
@@ -144,46 +140,22 @@ class AboutView(TemplateView):
         return context
 
     def thirty_day_registrations(self):
-        final_data = {}
-        dummy_dinal_dict = {}
-
-        date = arrow.now()
-
-
-        '''
-        for day in xrange(1, 30):
-            date = date.replace(days=-1)
-            count = User.objects.filter(
-                date_joined__gte=date.floor('day').datetime,
-                date_joined__lte=date.ceil('day').datetime).count()
-            final_data.append(count)
-        print final_data
-        '''
 
         #generate instance
-        get_jsm = JsmGetPrice(CORP_CD,START_DATE,END_DATE)  
+        today = datetime.date.today()
+        old_day = today - datetime.timedelta(days=30) 
+        start_date = old_day
+        end_date = today
+        get_jsm = JsmGetPrice(CORP_CD,start_date,end_date)  
           
         #get_date
         date = get_jsm.get_date()
-
         #get_price
         close_price = get_jsm.get_price()
 
-
-        dummy_final_data = [1,2,3,4,5,6,7]
-        #dummy_final_dict = {"price":[1,2,3,4,5,6,7],"date":[1,10,20,30,40,50,60]}
-        dummy_final_dict = {"price":close_price,"date":date}
+        date = [1,2,3,4,5]
+        price_dict = {"price":close_price,"date_":date}
         
-        #return final_data
-        print dummy_final_dict["price"]
-        print dummy_final_dict["date"]
-        #return dummy_final_data
-        return dummy_final_dict
+        return price_dict
 
 
-
-
-line_chart_json = LineChartJSONView.as_view()
-line_highchart_json = LineHighChartJSONView.as_view()
-pie_highchart_json = PieHighChartJSONView.as_view()
-donut_highchart_json = DonutHighChartJSONView.as_view()
