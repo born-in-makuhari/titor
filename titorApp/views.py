@@ -15,6 +15,7 @@ from chartjs.views.pie import HighChartPieView, HighChartDonutView
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from datetime import timedelta
+import json
 import jsm
 import datetime
 import re
@@ -136,10 +137,10 @@ class AboutView(TemplateView):
     def get_context_data(self, **kwargs):
         #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
         context = super(AboutView, self).get_context_data(**kwargs)
-        context['30_day_registrations'] = self.thirty_day_registrations()
+        context['stock_registrations'] = self.stock_price_registrations()
         return context
 
-    def thirty_day_registrations(self):
+    def stock_price_registrations(self):
 
         #generate instance
         today = datetime.date.today()
@@ -154,6 +155,8 @@ class AboutView(TemplateView):
         close_price = get_jsm.get_price()
 
         date = [1,2,3,4,5]
+        #date = json.dumps({'d':['1','2','3']})
+        #print date
         price_dict = {"price":close_price,"date_":date}
         
         return price_dict

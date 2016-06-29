@@ -14,9 +14,12 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
         <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
         <script type="text/javascript">
+            document.write({% for item in [1,2,3,4,5] %}
+                           "{{item}}" );
+            document.write("test");
             $( document ).ready(function() {
             var data = {
-                labels:{{30_day_registrations.date_}},
+                labels:{{stock_registrations.date_}},
                 //labels:['2016-05-27', '2016-05-30', '2016-05-31'],
                 datasets: [
                     {
@@ -27,8 +30,8 @@
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(220,220,220,1)",
-                    //data: {{ 30_day_registrations }}
-                    data: {{ 30_day_registrations.price}}
+                    //data: {{ 30_ }}
+                    data: {{ stock_registrations.price}}
                     //data: [1,1,1,6,1,9]
                     }
                 ]
