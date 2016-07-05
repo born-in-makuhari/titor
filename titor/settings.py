@@ -41,14 +41,14 @@ else:
 ALLOWED_HOSTS = []
 
 if 'titor' in hostname:
-    DEBUG = False
-    TEMPLATE_DEBUG = False
+    DEBUG = True
+    TEMPLATE_DEBUG = True
     ALLOWED_HOSTS = ['*']
     PRODUCTION = True
 else:
     DEBUG = True
     TEMPLATE_DEBUG = True
-    PRODUCTION = False
+    PRODUCTION = True
 
 # Application definition
 
