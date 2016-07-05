@@ -7,3 +7,4 @@ psycopg2==2.6.1
 six==1.10.0
 whitenoise==3.2
 jsm==0.19
+chart.js
