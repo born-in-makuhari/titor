@@ -137,7 +137,10 @@ class AboutView(TemplateView):
     def get_context_data(self, **kwargs):
         #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
         context = super(AboutView, self).get_context_data(**kwargs)
-        context['stock_registrations'] = self.stock_price_registrations()
+        date, close_price =  self.stock_price_registrations()
+        #context['stock_registrations'] = self.stock_price_registrations()
+        context['stock_registrations'] = close_price
+        context['date_registrations'] = date
         return context
 
     def stock_price_registrations(self):
@@ -154,11 +157,15 @@ class AboutView(TemplateView):
         #get_price
         close_price = get_jsm.get_price()
 
-        date = [1,2,3,4,5]
+        #date = "['1-1','2-1']"
+        a = "a"
+        #b = "b"
+        #date = json.JSONEncoder().encode([a,b])
+        #date = [a,b]
+        #date = a
         #date = json.dumps({'d':['1','2','3']})
-        #print date
         price_dict = {"price":close_price,"date_":date}
         
-        return price_dict
+        return [date, close_price]
 
 

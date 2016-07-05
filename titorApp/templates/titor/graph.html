@@ -9,17 +9,32 @@
         <body>
         <h1>Stock prices</h1>
 
-        <canvas id="myChart" width="500" height="400"></canvas>
+        <canvas id="myChart" width="1000" height="800"></canvas>
 
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
         <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
         <script type="text/javascript">
-            document.write({% for item in [1,2,3,4,5] %}
-                           "{{item}}" );
-            document.write("test");
+  
+
+            var dt = new String('{{ date_registrations }}');
+            dt = dt.toString(); 
+            dt = dt.replace(/&#39;/g,"'");
+            dt = eval( '(' + dt + ')');
             $( document ).ready(function() {
             var data = {
-                labels:{{stock_registrations.date_}},
+            //document.write({{ date_registrations}});
+                
+                //labels: "{{ date_registrations }}", 
+                labels: dt,
+                //labels:{{stock_registrations.date_}},
+                    //document.write({{date_registrations}})
+ 
+                //{% for a in  date_registrations  %}
+                //    var str_obj = new String({{date_registrations}});
+                //    document.write(str_obj.toString())
+            
+                //{% endfor %}
+
                 //labels:['2016-05-27', '2016-05-30', '2016-05-31'],
                 datasets: [
                     {
@@ -31,13 +46,14 @@
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(220,220,220,1)",
                     //data: {{ 30_ }}
-                    data: {{ stock_registrations.price}}
+                    data: {{ stock_registrations}}
                     //data: [1,1,1,6,1,9]
                     }
                 ]
             };
-            console.log(data.labels);
-            var ctx = document.getElementById("myChart").getContext("2d");
+            console.log(dt);
+            //var ctx = document.getElementById("myChart").getContext("2d");
+            var ctx = $("#myChart").get(0).getContext("2d");
             var myLineChart = new Chart(ctx).Line(data);
         });
         </script>
