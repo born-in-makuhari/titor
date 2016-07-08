@@ -10,3 +10,9 @@ titorApp/models.pyc
 titorApp/urls.pyc
 titorApp/views.pyc
 titorApp/migrations/__init__.pyc
+test.json
+titorApp/management/__init__.pyc
+titorApp/management/commands/JsmBach.pyc
+titorApp/management/commands/__init__.pyc
+titorApp/price_data/998407_2016-07-08.json
+titorApp/templates/titor/.graph.html.swp
