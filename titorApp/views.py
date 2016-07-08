@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 from django.shortcuts import render
 from random import shuffle, randint
 from itertools import islice
@@ -19,85 +21,38 @@ import json
 import jsm
 import datetime
 # Create your views here.
-
-
 ##############################
 #
 # nikkei average = 998407
 #
 ##############################
 CORP_CD = 998407
+FILE_PATH = 'titorApp/price_data/'
 
+class JsmGetPrice():
+    def __init__(self,corp_cd,start_date,end_date):
+        self.corp_cd = corp_cd    
+        self.start_date = start_date    
+        self.end_date = end_date 
+        self.close_dict = {}
+        self.close_list = []
+        self.date_list = []
+
+
+        file_name = FILE_PATH + str(self.corp_cd) + '_' + str(self.end_date) + '.json'
+        f = open(file_name,'r')
+        self.close_dict = json.load(f)
+        f.close()
+        for k,v in sorted(self.close_dict.items()):
+            self.close_list.append(v)
+            self.date_list.append(k.encode('utf-8'))
+
+    def get_price(self):
+        return self.close_list
+
+    def get_date(self):
+        return self.date_list
 """
-
-class ColorsView(TemplateView):
-    template_name = 'colors.html'
-
-    def get_context_data(self, **kwargs):
-        data = super(ColorsView, self).get_context_data(**kwargs)
-        data['colors'] = islice(next_color(), 0, 50)
-        return data
-
-class ChartMixin(object):
-
-    def test(self):
-        print "test"
-        return 0 
-
-    def get_labels(self):
-        #return ["January", "February", "March", "April", "May", "June", "July"]
-        get_jsm = JsmGetPrice(CORP_CD,START_DATE,END_DATE)
-        #get_jsm = GET_JSM
-        date = get_jsm.get_date()
-        return date
-        #return ["1","2","3","4","5","6","7","8"]
-
-    def get_data(self):
-        def data():
-            return [randint(0, 100) for x in range(7)]
-
-        #return [data() for x in range(3)]
-        get_jsm = JsmGetPrice(CORP_CD,START_DATE,END_DATE)
-        close_price = get_jsm.get_price()     
-        return [close_price]
-
-    def get_colors(self):
-        colors = COLORS[:]
-        shuffle(colors)
-        return next_color(colors)
-
-
-
-class ColumnHighChartJSONView(ChartMixin, BaseColumnsHighChartsView):
-    title = _('Column Highchart test')
-    yUnit = '%'
-    providers = ['All']
-    credits = {"enabled": False}
-
-    def get_data(self):
-        return [super(ColumnHighChartJSONView, self).get_data()]
-
-
-
-class LineChartJSONView(ChartMixin, BaseLineChartView):
-    pass
-
-class LineHighChartJSONView(ChartMixin, HighchartPlotLineChartView):
-    # special - line charts credits are personalized
-    credits = {
-        'enabled': True,
-        'href': 'http://example.com',
-        'text': 'Novapost Team',
-    }
-
-class PieHighChartJSONView(ChartMixin, HighChartPieView):
-    pass
-
-
-class DonutHighChartJSONView(ChartMixin, HighChartDonutView):
-    pass
-"""
-
 class JsmGetPrice():
     def __init__(self,corp_cd,start_date,end_date):
         q = jsm.Quotes()
@@ -109,23 +64,22 @@ class JsmGetPrice():
         self.close_list = []
         self.date_list = []
 
-
-
         for pricedata_eachday in self.pricedata:
         #print str(pricedata_eachday.date).replace(' 00:00:00','')
             self.close_dict[str(pricedata_eachday.date).replace(' 00:00:00','')] = pricedata_eachday.close
-
-        
         for k,v in sorted(self.close_dict.items()):
             self.close_list.append(v)
             self.date_list.append(k)
-           
 
     def get_price(self):
         return self.close_list
+        #return 0
 
     def get_date(self):
         return self.date_list
+        #return 0
+
+"""
 
 
 #class AnalyticsIndexView(TemplateView):
@@ -150,20 +104,10 @@ class AboutView(TemplateView):
         end_date = today
         get_jsm = JsmGetPrice(CORP_CD,start_date,end_date)  
           
+
         #get_date
         date = get_jsm.get_date()
         #get_price
         close_price = get_jsm.get_price()
-
-        #date = "['1-1','2-1']"
-        a = "a"
-        #b = "b"
-        #date = json.JSONEncoder().encode([a,b])
-        #date = [a,b]
-        #date = a
-        #date = json.dumps({'d':['1','2','3']})
-        price_dict = {"price":close_price,"date_":date}
         
         return [date, close_price]
-
-
