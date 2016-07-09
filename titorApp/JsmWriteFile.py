@@ -13,25 +13,7 @@ import datetime
 CORP_CD = 998407
 FILE_PATH = 'titorApp/price_data/'
 
-class Command(BaseCommand):
-    close_data = []
-    date = []
-
-
-    def handle(self, *args, **options):
-
-        today = datetime.date.today()
-        old_day = today - datetime.timedelta(days=30) 
-        start_date = old_day
-        end_date = today
-        get_jsm = JsmGetPriceBach(CORP_CD,start_date,end_date)
-        
-        #file make
-        get_jsm.json_write()
- 
-        
-
-class JsmGetPriceBach():
+class JsmPriceFileCreate():
     def __init__(self,corp_cd,start_date,end_date):
         q = jsm.Quotes()
         self.corp_cd = corp_cd    
@@ -51,7 +33,7 @@ class JsmGetPriceBach():
 
 
     def json_write(self):
-        print "file make"
+        print "file make start"
         file_name = FILE_PATH + str(self.corp_cd) + '_' + str(datetime.date.today()) + '.json'
         f = open(file_name,'w')
         json.dump(self.close_dict,f)
@@ -64,11 +46,3 @@ class JsmGetPriceBach():
 
     def get_date(self):
         return self.date_list
-
-
-
-
-
-
-
-

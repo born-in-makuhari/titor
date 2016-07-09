@@ -10,16 +10,16 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
-from chartjs.colors import next_color, COLORS
-from chartjs.views.columns import BaseColumnsHighChartsView
-from chartjs.views.lines import BaseLineChartView, HighchartPlotLineChartView
-from chartjs.views.pie import HighChartPieView, HighChartDonutView
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from datetime import timedelta
 import json
 import jsm
 import datetime
+import os.path
+import JsmWriteFile
+import sys,os
+
 # Create your views here.
 ##############################
 #
@@ -28,6 +28,10 @@ import datetime
 ##############################
 CORP_CD = 998407
 FILE_PATH = 'titorApp/price_data/'
+BACH_PATH = '/management/commands'
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + BACH_PATH)
+print os.path.dirname(os.path.abspath(__file__)) + BACH_PATH
+
 
 class JsmGetPrice():
     def __init__(self,corp_cd,start_date,end_date):
@@ -38,8 +42,19 @@ class JsmGetPrice():
         self.close_list = []
         self.date_list = []
 
-
         file_name = FILE_PATH + str(self.corp_cd) + '_' + str(self.end_date) + '.json'
+        if os.path.exists(file_name):
+            #file exists
+            print "file exit!!! "
+
+        else:
+            #file not exists
+            #file create
+            print "file not exist"
+            jsm = JsmWriteFile.JsmPriceFileCreate(self.corp_cd,self.start_date,self.end_date)
+            print "file make"
+            jsm.json_write()
+
         f = open(file_name,'r')
         self.close_dict = json.load(f)
         f.close()
@@ -52,37 +67,7 @@ class JsmGetPrice():
 
     def get_date(self):
         return self.date_list
-"""
-class JsmGetPrice():
-    def __init__(self,corp_cd,start_date,end_date):
-        q = jsm.Quotes()
-        self.corp_cd = corp_cd    
-        self.start_date = start_date    
-        self.end_date = end_date    
-        self.close_dict = {}
-        self.pricedata = q.get_historical_prices(corp_cd, jsm.DAILY, start_date, end_date)
-        self.close_list = []
-        self.date_list = []
 
-        for pricedata_eachday in self.pricedata:
-        #print str(pricedata_eachday.date).replace(' 00:00:00','')
-            self.close_dict[str(pricedata_eachday.date).replace(' 00:00:00','')] = pricedata_eachday.close
-        for k,v in sorted(self.close_dict.items()):
-            self.close_list.append(v)
-            self.date_list.append(k)
-
-    def get_price(self):
-        return self.close_list
-        #return 0
-
-    def get_date(self):
-        return self.date_list
-        #return 0
-
-"""
-
-
-#class AnalyticsIndexView(TemplateView):
 class AboutView(TemplateView):
     template_name = "titor/graph.html"
 
@@ -103,7 +88,6 @@ class AboutView(TemplateView):
         start_date = old_day
         end_date = today
         get_jsm = JsmGetPrice(CORP_CD,start_date,end_date)  
-          
 
         #get_date
         date = get_jsm.get_date()
