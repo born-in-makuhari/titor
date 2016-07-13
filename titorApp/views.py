@@ -95,3 +95,36 @@ class AboutView(TemplateView):
         close_price = get_jsm.get_price()
         
         return [date, close_price]
+
+
+
+class MonthData(TemplateView):
+    template_name = "titor/graph.html"
+
+    def get_context_data(self, **kwargs):
+        print "Month get"
+        #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
+        context = super(MonthData, self).get_context_data(**kwargs)
+        date, close_price =  self.stock_price_registrations()
+        #context['stock_registrations'] = self.stock_price_registrations()
+        context['stock_registrations'] = close_price
+        context['date_registrations'] = date
+        return context
+
+    def stock_price_registrations(self):
+
+        #generate instance
+        
+        today = datetime.date.today()
+        old_day = today - datetime.timedelta(days=30) 
+        start_date = old_day
+        end_date = today
+        get_jsm = JsmGetPrice(CORP_CD,start_date,end_date)  
+
+        #get_date
+        date = get_jsm.get_date()
+        #get_price
+        close_price = get_jsm.get_price()
+        
+        return [date, close_price]
+
