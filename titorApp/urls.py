@@ -7,4 +7,6 @@ urlpatterns = patterns('titorApp.views',
     # Examples:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^titor/$', AboutView.as_view()),
+    url(r'^year/$', AboutView.as_view()),
+    url(r'^month/$', AboutView.as_view()),
 )
