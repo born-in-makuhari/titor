@@ -19,6 +19,8 @@ import datetime
 import os.path
 import JsmWriteFile
 import sys,os
+import glob
+import re
 
 # Create your views here.
 ##############################
@@ -46,11 +48,17 @@ class JsmGetPrice():
         if os.path.exists(file_name):
             #file exists
             print "file exit!!! "
+            print glob.glob(FILE_PATH + '*')
 
         else:
-            #file not exists
-            #file create
             print "file not exist"
+            #file not exists
+            #oldfile delite
+            print glob.glob(FILE_PATH + '*')
+            for i in glob.glob(FILE_PATH + '*'):
+                os.remove(i)           
+ 
+            #file create
             jsm = JsmWriteFile.JsmPriceFileCreate(self.corp_cd,self.start_date,self.end_date)
             print "file make"
             jsm.json_write()
@@ -59,14 +67,41 @@ class JsmGetPrice():
         self.close_dict = json.load(f)
         f.close()
         for k,v in sorted(self.close_dict.items()):
+            v = int(v)
             self.close_list.append(v)
             self.date_list.append(k.encode('utf-8'))
-
+        
     def get_price(self):
         return self.close_list
 
     def get_date(self):
-        return self.date_list
+        taihi = "a"
+        d_list = []
+        for d in self.date_list:
+            d = d[0:7]
+            if taihi == d:
+                d_list.append(" ") 
+            else:
+                d_list.append(d)
+            taihi = d 
+        print d_list
+        return d_list
+
+    def month_get_price(self):
+        print self.close_list
+        month_price_list = []
+        month_data_len = len(self.close_list) - 20
+        month_price_list = self.close_list[month_data_len:]
+        return month_price_list
+
+    def month_get_date(self):
+        print self.date_list
+        month_date_list = []
+        month_data_len = len(self.date_list) - 20
+        month_date_list = self.date_list[month_data_len:]
+        return month_date_list
+
+
 
 class AboutView(TemplateView):
     template_name = "titor/graph.html"
@@ -84,7 +119,7 @@ class AboutView(TemplateView):
 
         #generate instance
         today = datetime.date.today()
-        old_day = today - datetime.timedelta(days=30) 
+        old_day = today - datetime.timedelta(days=365) 
         start_date = old_day
         end_date = today
         get_jsm = JsmGetPrice(CORP_CD,start_date,end_date)  
@@ -116,15 +151,19 @@ class MonthData(TemplateView):
         #generate instance
         
         today = datetime.date.today()
-        old_day = today - datetime.timedelta(days=30) 
+        old_day = today - datetime.timedelta(days=365)
         start_date = old_day
         end_date = today
         get_jsm = JsmGetPrice(CORP_CD,start_date,end_date)  
 
         #get_date
-        date = get_jsm.get_date()
+        date = get_jsm.month_get_date()
+        #date = get_jsm.get_date()
         #get_price
-        close_price = get_jsm.get_price()
+        close_price = get_jsm.month_get_price()
+        #close_price = get_jsm.get_price()
         
+        print get_jsm.month_get_date()
+        print get_jsm.month_get_price()
         return [date, close_price]
 
