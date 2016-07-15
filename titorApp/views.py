@@ -31,6 +31,7 @@ import re
 CORP_CD = 998407
 FILE_PATH = 'titorApp/price_data/'
 BACH_PATH = '/management/commands'
+SCALE_STEP_WIDTH = 1000 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + BACH_PATH)
 print os.path.dirname(os.path.abspath(__file__)) + BACH_PATH
 
@@ -101,7 +102,24 @@ class JsmGetPrice():
         month_date_list = self.date_list[month_data_len:]
         return month_date_list
 
+class StepCalc():
+    def __init__(self,cl_list):
+        self.cl_list = []
+        self.cl_list = cl_list
 
+    def min_num(self):
+        min_num = (min(self.cl_list) / SCALE_STEP_WIDTH) * SCALE_STEP_WIDTH
+        return min_num 
+
+    def max_num(self):
+        return(max(self.cl_list)) 
+
+    def step_num(self):
+        deff_num = max(self.cl_list) - min(self.cl_list)
+        step_num = deff_num / SCALE_STEP_WIDTH
+        print "step_num method"
+        print step_num
+        return step_num + 2
 
 class AboutView(TemplateView):
     template_name = "titor/graph.html"
@@ -109,10 +127,12 @@ class AboutView(TemplateView):
     def get_context_data(self, **kwargs):
         #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
         context = super(AboutView, self).get_context_data(**kwargs)
-        date, close_price =  self.stock_price_registrations()
+        date, close_price, step_num, min_num =  self.stock_price_registrations()
         #context['stock_registrations'] = self.stock_price_registrations()
         context['stock_registrations'] = close_price
         context['date_registrations'] = date
+        context['step_num'] = step_num
+        context['min_num'] = min_num
         return context
 
     def stock_price_registrations(self):
@@ -128,8 +148,18 @@ class AboutView(TemplateView):
         date = get_jsm.get_date()
         #get_price
         close_price = get_jsm.get_price()
-        
-        return [date, close_price]
+        #min_num
+        step_calc = StepCalc(close_price)
+        min_num = step_calc.min_num()
+        #step_num 
+        step_num = step_calc.step_num() 
+        print "step num !!!!!"
+        print step_num
+        print "min num !!!!!"
+        print min_num
+        print "max num !!!!!"   
+        print step_calc.max_num()
+        return [date, close_price, step_num, min_num]
 
 
 
@@ -140,10 +170,12 @@ class MonthData(TemplateView):
         print "Month get"
         #context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
         context = super(MonthData, self).get_context_data(**kwargs)
-        date, close_price =  self.stock_price_registrations()
+        date, close_price, step_num, min_num =  self.stock_price_registrations()
         #context['stock_registrations'] = self.stock_price_registrations()
         context['stock_registrations'] = close_price
         context['date_registrations'] = date
+        context['step_num'] = step_num
+        context['min_num'] = min_num
         return context
 
     def stock_price_registrations(self):
@@ -162,8 +194,17 @@ class MonthData(TemplateView):
         #get_price
         close_price = get_jsm.month_get_price()
         #close_price = get_jsm.get_price()
-        
-        print get_jsm.month_get_date()
-        print get_jsm.month_get_price()
-        return [date, close_price]
+        #min_num
+        step_calc = StepCalc(close_price)
+        min_num = step_calc.min_num()
+        #step_num 
+        step_num = step_calc.step_num() 
+        print "step num !!!!!"
+        print step_num
+        print "min num !!!!!"
+        print min_num
+        print "max num !!!!!"   
+        print step_calc.max_num()
+        #return [date, close_price]
+        return [date, close_price, step_num, min_num]
 

@@ -46,10 +46,60 @@
                     }
                 ]
             };
+   
+
+var option = {
+  //Boolean - 縦軸の目盛りの上書き許可
+  scaleOverride : true,
+  //** ↑がtrueの場合 **
+  //Number - 目盛りの間隔
+  scaleSteps : {{step_num}},
+  //Number - 目盛り区切りの間隔
+  scaleStepWidth : 1000,
+  //Number - 目盛りの最小値
+  scaleStartValue : {{min_num}},
+  //String - 目盛りの線の色 
+  //scaleLineColor : "rgba(0,0,0,.1)",
+  //Number - 目盛りの線の幅  
+  //scaleLineWidth : 10,
+  //Boolean - 目盛りを表示するかどうか  
+  scaleShowLabels : true,
+  //String - 目盛りのフォント
+  scaleFontFamily : "'Arial'",
+  //Number - 目盛りのフォントサイズ 
+  scaleFontSize : 10,
+  //String - 目盛りのフォントスタイル bold→太字  
+  scaleFontStyle : "normal",
+  //String - 目盛りのフォント 
+  scaleFontColor : "#666",  
+  ///Boolean - チャートの背景にグリッドを描画するか
+  scaleShowGridLines : true,
+  //String - チャート背景のグリッド色
+  //scaleGridLineColor : "rgba(0,0,0,.05)",
+  //Number - チャート背景のグリッドの太さ
+  scaleGridLineWidth : 1,  
+  //Boolean - 線を曲線にするかどうか。falseで折れ線になる
+  bezierCurve : true,
+  //Boolean - 点を描画するか
+  pointDot : false,
+  //Number - 点の大きさ
+  pointDotRadius : 3,
+  //Number - 点の周りの大きさ
+  pointDotStrokeWidth : 1,
+  //Number - 線の太さ
+  datasetStrokeWidth : 2,
+  //Boolean - アニメーションの有無
+  animation : true,
+  //Number - アニメーションの早さ(大きいほど遅い)
+  animationSteps : 60,
+  //Function - アニメーション終了時の処理
+  onAnimationComplete : null
+};
+
             console.log(dt);
             //var ctx = document.getElementById("myChart").getContext("2d");
             var ctx = $("#myChart").get(0).getContext("2d");
-            var myLineChart = new Chart(ctx).Line(data);
+            var myLineChart = new Chart(ctx).Line(data,option);
         });
         </script>
 {% endblock %}
