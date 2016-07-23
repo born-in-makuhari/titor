@@ -1,12 +1,27 @@
+{% load staticfiles %} 
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap Sample</title>
+    <!-- BootstrapのCSS読み込み -->
+    <link href="{{ STATIC_URL}}css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery読み込み -->
+    <script src="{{ STATIC_URL }}js/jquery-3.1.0.min.js"></script>
+    <!-- BootstrapのJS読み込み -->
+    <script src="{{ static }}js/bootstrap.min.js' %}"></script>
 </head>
 <body>
+    
+<div class="container-fluid bg-info">
     <h1>Stock prices
-        <a href="/titor/titor/"> year </a> 
-        <a href="/titor/month/"> month </a> 
+       <h2> <a href="/titor/titor/"> year </a> 
+        <a href="/titor/month/"> month </a>
+       </h2> 
     </h1>
+</div>
 </body>
 
 <body>
